@@ -12,7 +12,7 @@ type NavItem = { id: "about" | "mission"; label: string };
 function Brand() {
   return (
     <div className="flex items-center gap-3">
-      <div className="relative h-9 w-[220px]">
+      <div className="relative h-[clamp(2rem,5vmin,2.25rem)] w-[clamp(7.75rem,38vmin,13.75rem)]">
         <Image
           src="/logo-lockup.png"
           alt="Naydenov Family Office"
@@ -39,18 +39,18 @@ function Header({ items }: { items: NavItem[] }) {
 
   return (
     <header className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-[var(--space-page-x)] py-[clamp(1rem,2.5vmin,1.5rem)]">
         <a href="#top" className="group inline-flex items-center">
           <Brand />
           <span className="sr-only">Go to top</span>
         </a>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-[clamp(1.5rem,4vmin,2.5rem)] md:flex">
           {items.map((it) => (
             <a
               key={it.id}
               href={`#${it.id}`}
-              className="text-[11px] tracking-[0.34em] text-white/75 transition hover:text-white"
+              className="nav-pill text-white/75 transition hover:text-white"
             >
               {it.label.toUpperCase()}
             </a>
@@ -125,7 +125,7 @@ function Header({ items }: { items: NavItem[] }) {
               <a
                 key={it.id}
                 href={`#${it.id}`}
-                className="block rounded-lg px-4 py-3 text-[12px] tracking-[0.28em] text-white/85 hover:bg-white/10"
+                className="nav-pill block rounded-lg px-4 py-3 text-white/85 hover:bg-white/10"
                 onClick={() => setOpen(false)}
               >
                 {it.label.toUpperCase()}
@@ -140,16 +140,19 @@ function Header({ items }: { items: NavItem[] }) {
 
 function Hero() {
   return (
-    <section id="top" className="relative isolate -mb-px bg-[#23265f]">
-      <div className="relative w-full">
+    <section
+      id="top"
+      className="relative isolate -mb-px flex h-[100svh] min-h-[100svh] flex-col overflow-hidden bg-[#23265f]"
+    >
+      {/* Full-viewport hero so headline stays above the fold; image covers (no document-tall strip). */}
+      <div className="absolute inset-0">
         <Image
           src="/hero-sofia.jpg"
           alt=""
-          width={1024}
-          height={682}
+          fill
           priority
           unoptimized
-          className="block h-auto w-full max-w-full"
+          className="object-cover object-center"
           sizes="100vw"
         />
         {/* Figma `#gradients`: linear #292764 — 100% → 40% → 85% opacity (0% → 50% → 100%) */}
@@ -162,33 +165,33 @@ function Hero() {
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,transparent_42%,rgba(35,38,95,0.45)_58%,rgba(35,38,95,0.92)_78%,#23265f_100%)]"
           aria-hidden
         />
-        <div className="absolute inset-x-0 bottom-0 z-10 mx-auto max-w-6xl px-5 pb-16 pt-28 md:pb-24 md:pt-36">
-          <div className="max-w-2xl">
-            <h1 className="text-balance text-4xl font-bold tracking-normal text-white sm:text-5xl md:text-6xl 2xl:w-[834px] 2xl:text-[96px] 2xl:leading-[100px]">
-              We Were, We Are,
-              <br />
-              We Will Be
-            </h1>
-            <div className="mt-10 flex items-center gap-3 text-xs tracking-[0.32em] text-white/70">
-              <span>SCROLL DOWN</span>
-              <span className="h-px w-8 bg-white/35" />
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="opacity-80"
-              >
-                <path
-                  d="M12 5v12m0 0 6-6m-6 6-6-6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+      </div>
+      <div className="relative z-10 mx-auto mt-auto w-full max-w-6xl px-[var(--space-page-x)] pb-[calc(var(--hero-pad-bottom)+env(safe-area-inset-bottom,0px))] pt-[var(--hero-pad-top)]">
+        <div className="max-w-2xl">
+          <h1 className="hero-title text-balance font-bold tracking-normal text-white">
+            We Were, We Are,
+            <br />
+            We Will Be
+          </h1>
+          <div className="hero-scroll-hint mt-[clamp(1rem,2vmin,2.5rem)] flex items-center gap-3 text-white/70">
+            <span>SCROLL DOWN</span>
+            <span className="h-px w-8 bg-white/35" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="opacity-80"
+            >
+              <path
+                d="M12 5v12m0 0 6-6m-6 6-6-6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -199,29 +202,21 @@ function Hero() {
 function SectionHeading({
   label,
   tone = "light",
-  desktopSize,
 }: {
   label: string;
   tone?: "light" | "dark";
-  desktopSize?: "about" | "mission";
 }) {
   return (
-    <div
-      className={cx(
-        "inline-flex h-[18px] items-center gap-4",
-        desktopSize === "about" ? "2xl:w-[231px]" : "",
-        desktopSize === "mission" ? "2xl:w-[208px]" : "",
-      )}
-    >
+    <div className="inline-flex items-center gap-4">
       <span
         className={cx(
-          "h-px w-[72px]",
+          "section-eyebrow-line h-px shrink-0",
           tone === "light" ? "bg-white/80" : "bg-[#292764]",
         )}
       />
       <h2
         className={cx(
-          "text-[11px] leading-[18px] tracking-[0.34em] 2xl:text-[18px] 2xl:tracking-[6px]",
+          "section-eyebrow uppercase",
           tone === "light" ? "text-white" : "text-[#292764]",
         )}
       >
@@ -234,10 +229,10 @@ function SectionHeading({
 function About() {
   return (
     <section id="about" className="relative z-10 bg-[#23265f]">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:grid-cols-2 md:gap-14 md:py-24">
-        <div className="max-w-prose 2xl:max-w-[520px]">
-          <SectionHeading label="About Us" tone="light" desktopSize="about" />
-          <p className="mt-6 text-sm font-normal leading-7 tracking-normal text-white/80 md:text-[15px] 2xl:min-h-[396px] 2xl:text-[24px] 2xl:leading-[150%]">
+      <div className="mx-auto grid max-w-6xl items-center gap-[var(--space-grid-gap)] px-[var(--space-page-x)] py-[var(--space-section-y)] md:grid-cols-2">
+        <div className="max-w-prose md:max-w-[32.5rem]">
+          <SectionHeading label="About Us" tone="light" />
+          <p className="section-prose mt-6 font-normal tracking-normal text-white/80">
             The Naydenov Family Office was created, with the purpose of managing
             the assets of the third generation of the Naydenov family and the
             inheritance of its patriarch the late Georgi Naydenov. Georgi
@@ -272,7 +267,7 @@ function About() {
 function Mission() {
   return (
     <section id="mission" className="bg-white">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-2 md:gap-14 md:py-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-[var(--space-grid-gap)] px-[var(--space-page-x)] py-[var(--space-section-y)] md:grid-cols-2">
         <div className="order-2 md:order-1">
           <div className="relative mx-auto w-full max-w-[360px]">
             <Image
@@ -286,8 +281,8 @@ function Mission() {
         </div>
 
         <div className="order-1 md:order-2">
-          <SectionHeading label="Mission" tone="dark" desktopSize="mission" />
-          <p className="mt-6 max-w-prose text-sm font-normal leading-7 tracking-normal text-[#1f234f]/80 md:text-[15px] 2xl:max-w-[520px] 2xl:min-h-[216px] 2xl:text-[24px] 2xl:leading-[150%]">
+          <SectionHeading label="Mission" tone="dark" />
+          <p className="section-prose mt-6 max-w-prose font-normal tracking-normal text-[#1f234f]/80 md:max-w-[32.5rem]">
             Our mission is to ensure the continuation of the legacy of our family
             patriarch Georgi Naydenov for further generations, by actively
             managing key business interests, in accordance with his credo “We
@@ -303,7 +298,7 @@ function Footer() {
   const year = useMemo(() => new Date().getFullYear(), []);
   return (
     <footer className="bg-[#23265f]">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-5 py-12 md:flex-row">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-[var(--space-page-x)] py-[clamp(2.5rem,5vmin,3rem)] md:flex-row">
         <Brand />
         <div className="text-xs text-white/55">
           © {year} Naydenov Family Office. All rights reserved.
