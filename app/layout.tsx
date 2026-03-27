@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ClientUiScale from "./ClientUiScale";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       style={{ colorScheme: "light" }}
     >
       <body className={`${geistSans.className} min-h-full flex flex-col`}>
+        <ClientUiScale targetDevicePixelRatio={1.5} />
         {children}
       </body>
     </html>
