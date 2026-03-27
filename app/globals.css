@@ -6,13 +6,12 @@
   --brand-ink: #23265f;
   --brand-ink-2: #1c1f4f;
 
-  /* Fluid scale at 100% zoom — continuous across widths (no breakpoint jumps) */
-  --space-page-x: clamp(1rem, 2.5vw + 0.5rem, 1.5rem);
-  --space-section-y: clamp(3rem, 6vw + 1.5rem, 6rem);
-  /* Cap padding growth so huge monitors don’t shove hero copy against the bottom edge */
-  --hero-pad-bottom: clamp(2.75rem, 3vh + 1.75rem, 4.5rem);
-  --hero-pad-top: clamp(1.5rem, 2.5vh, 2.5rem);
-  --space-grid-gap: clamp(2.25rem, 4vw + 1rem, 3.5rem);
+  /* Fixed sizing so desktop looks the same across screen sizes */
+  --space-page-x: 1.5rem;
+  --space-section-y: 6rem;
+  --hero-pad-bottom: 4.5rem;
+  --hero-pad-top: 2.5rem;
+  --space-grid-gap: 3.5rem;
 }
 
 @theme inline {
@@ -41,47 +40,64 @@ body {
  * min(..., svh) keeps the block fitting the first screen when height is the limiting dimension.
  */
 h1.hero-title {
-  font-size: min(
-    clamp(1.875rem, 0.75rem + 5.25vmin, 4.5rem),
-    max(1.875rem, calc(0.092 * 100svh))
-  );
-  line-height: 1.05;
+  font-size: 4.25rem;
+  line-height: 1.06;
   max-width: min(52.125rem, 100%);
 }
 
-/* Large desktop tuning: on big monitors at 100% zoom the viewport is huge, so we scale up
-   a bit to keep the “laptop” proportions, while still respecting the svh safety cap. */
-@media (min-width: 1440px) {
+/* Small screens: scale down to keep everything visible */
+@media (max-width: 1024px) {
+  :root {
+    --space-page-x: 1.25rem;
+    --space-section-y: 4.5rem;
+    --hero-pad-bottom: 4rem;
+    --hero-pad-top: 2rem;
+    --space-grid-gap: 3rem;
+  }
+
   h1.hero-title {
-    font-size: min(
-      clamp(2.25rem, 0.9rem + 5.6vmin, 5.25rem),
-      max(2.25rem, calc(0.1 * 100svh))
-    );
+    font-size: 3.25rem;
+    line-height: 1.08;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --space-page-x: 1rem;
+    --space-section-y: 3.75rem;
+    --hero-pad-bottom: 3.25rem;
+    --hero-pad-top: 1.5rem;
+    --space-grid-gap: 2.5rem;
+  }
+
+  h1.hero-title {
+    font-size: 2.5rem;
+    line-height: 1.12;
   }
 }
 
 /* Section labels + body copy: same proportions from phone to large desktop */
 .section-eyebrow {
-  font-size: clamp(0.6875rem, 0.55rem + 0.35vw, 1.125rem);
+  font-size: 0.6875rem;
   line-height: 1.3;
   letter-spacing: 0.34em;
 }
 
 .section-eyebrow-line {
-  width: clamp(2.5rem, 12vw, 4.5rem);
+  width: 4.5rem;
 }
 
 .section-prose {
-  font-size: clamp(0.875rem, 0.82rem + 0.22vw, 1.5rem);
+  font-size: 1rem;
   line-height: 1.5;
 }
 
 .hero-scroll-hint {
-  font-size: clamp(0.65rem, 0.6rem + 0.15vw, 0.75rem);
+  font-size: 0.75rem;
   letter-spacing: 0.32em;
 }
 
 .nav-pill {
-  font-size: clamp(0.625rem, 0.6rem + 0.12vw, 0.6875rem);
+  font-size: 0.6875rem;
   letter-spacing: 0.34em;
 }
